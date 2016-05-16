@@ -1,88 +1,163 @@
-# user chooses from a list of main dishes
-# user chooses 2 side dish items
-# computer repeats users order
-# computer totals lunch items and displays total
-# require 'pry'
-class Food
-	attr_accessor :name, :price# :description, :calories, :fat, :carbs, :protein
+@order = []
+@sum = []
 
-	def initialize(name, price)# description, calories, fat, carbs, protein)
-		@name = name
-		@price = price
-	end
+@main = {
+	pizza: {name: 'Pizza', price: 4.05, description: 'Topped with veggies, and very cheesy.'},
+	tacos: {name: 'Tacos', price: 3.55, description: 'Fish and veggies options available.'},
+	burger: {name: 'Burger', price: 5.05, description: 'Gourmet veggie burger with a slice of cheese.'},
+	lasagna: {name: 'Lasagna', price: 4.55, description: 'Homemade, comforting, veggie lasagna.'}
+}
+
+@side = {
+	fries: {name: 'Fries', price: 1.55, description: 'Double-fried, golden, and crispy.'},
+	salad: {name: 'Salad', price: 2.05, description: 'House chopped side-salad.'},
+	soup: {name: 'Soup', price: 1.75, description: 'Hearty soup of the day.'},
+	brownie: {name: 'Brownie', price: 1.05, description: 'Delicious, fudgy, double-chocolate.'},
+	cookie: {name: 'Cookie', price: 1.25, description: 'Double chocolate chip.'}	
+}
+
+def budget
+	puts "What's your budget today?"
+	@money = gets.strip.to_i
+	main_menu
 end
-
-class Main < Food
-	def initialize(name, price)# description, calories, fat, carbs, protein)
-			super(name, price)# description, calories, fat, carbs, protein)
-	end
-end
-
-class Side < Food
-	def initialize(name, price)# description, calories, fat, carbs, protein, sugar)
-		super(name, price)# description, calories, fat, carbs, protein)
-	end
-end
-
 
 def main_menu
-	pizza = Main.new('Pizza', '$4.00')
-	tacos = Main.new('Tacos', '$3.50')
-	burger = Main.new('Burger', '$5.00')
-	lasagna = Main.new('Lasagna', '$4.50')
-
-	puts "What main dish would you like?"
-	puts "1. #{pizza.name} - #{pizza.price}"
-	puts "2. #{tacos.name} - #{tacos.price}"
-	puts "3. #{burger.name} - #{burger.price}"
-	puts "4. #{lasagna.name} - #{lasagna.price}"
-	input1 = gets.strip.to_i
-	side1(input1)
-end
-
-def verify_main(input1)
-	if input1 == 1 || input1 == 2 || input1 == 3 || input1 == 4 
-	side1
-	else input1
+	@order.clear
+	@sum.clear
+	puts "Please choose what you would like to eat from the menu:"
+	puts "#{@main[:pizza][:name]} - $#{@main[:pizza][:price]}"
+	puts "#{@main[:tacos][:name]} - $#{@main[:tacos][:price]}"
+	puts "#{@main[:burger][:name]} - $#{@main[:burger][:price]}"
+	puts "#{@main[:lasagna][:name]} - $#{@main[:lasagna][:price]}"
+	puts "Type 'd' to if you want to see the description of the food, or 'quit' to exit."
+	@input1 = gets.strip.downcase.to_s
+	if @input1 == 'pizza' || @input1 == 'tacos' || @input1 == 'burger' || @input1 == 'lasagna'
+		@order << @input1
+			@sum << @main[@input1.to_sym][:price]
+		side1
+	elsif @input1 == 'd'
+		main_desc
+	elsif @input1 == 'quit'
+		puts "Thanks for visiting the Ruby Cafeteria!"
+		exit(0)
+	else
 		puts "User Input Error, Please Input Your Menu Choice Again"
 		main_menu
 	end
 end
 
-def side1(input1)
-	fries = Side.new('Fries', '$1.50')
-	salad = Side.new('Salad', '$2.00')
-	soup = Side.new('Soup', '$1.75')
-	brownie = Side.new('Brownie', '$1.00')
-	cookie = Side.new('Cookie', '$1.25')
-	
-	puts "Please choose your side dishes:"
-	puts "1. #{fries.name} - #{fries.price}"
-	puts "2. #{salad.name} - #{salad.price}"
-	puts "3. #{soup.name} - #{soup.price}"
-	puts "4. #{brownie.name} - #{brownie.price}"
-	puts "5. #{cookie.name} - #{cookie.price}"
-	input2 = gets.strip.to_i
-	side2(input2)
+def main_desc
+	puts "Choose what you would like to see the description of:"
+	puts "#{@main[:pizza][:name]}"
+	puts "#{@main[:tacos][:name]}"
+	puts "#{@main[:burger][:name]}"
+	puts "#{@main[:lasagna][:name]}"
+	puts "To exit, type 'quit'."
+	@input_desc = gets.strip.downcase.to_s
+	if @input_desc == 'pizza' || @input_desc == 'tacos' || @input_desc == 'burger' || @input_desc == 'lasagna'
+		puts @main[@input_desc.to_sym][:description]
+		main_menu
+	elsif @input_desc == 'quit'
+		puts "Thanks for visiting the Ruby Cafeteria!"
+		exit(0)
+	else
+		puts "User Input Error, Please Input Your Description Choice Again"
+		main_desc
+	end
 end
 
-# def verify_side(input2)
-# 	if input2 == 1 || input2 == 2 || input2 == 3 || input2 == 4 || input2 == 5
-# 		side1
-# 	else input2
-# 		puts "User Input Error, Please Input Your Menu Choice Again"
-# 		main_menu
-# 	end
-# end
-main_menu
+def side1
+	puts "Please choose your side dish:"
+	puts "#{@side[:fries][:name]} - #{@side[:fries][:price]}"
+	puts "#{@side[:salad][:name]} - #{@side[:salad][:price]}"
+	puts "#{@side[:soup][:name]} - #{@side[:soup][:price]}"
+	puts "#{@side[:brownie][:name]} - #{@side[:brownie][:price]}"
+	puts "#{@side[:cookie][:name]} - #{@side[:cookie][:price]}"
+	puts "Type 'd' to if you want to see the description of the food, or 'quit' to exit."
+	@input2 = gets.strip.downcase.to_s
+	if @input2 == 'fries' || @input2 == 'salad' || @input2 == 'soup' || @input2 == 'brownie' || @input2 == 'cookie'
+		@order << @input2
+			@sum << @side[@input2.to_sym][:price]
+		second_side
+	elsif @input2 == 'd'
+		side_desc
+	elsif @input2 == 'quit'
+		puts "Thanks for visiting the Ruby Cafeteria!"
+		exit(0)
+	else
+		puts "User Input Error, Please Input Your Side Choice Again"
+		side1
+	end
+end
 
+def side_desc
+	puts "Choose what you would like to see the description of:"
+	puts "#{@side[:fries][:name]}"
+	puts "#{@side[:salad][:name]}"
+	puts "#{@side[:soup][:name]}"
+	puts "#{@side[:brownie][:name]}"
+	puts "#{@side[:cookie][:name]}"
+	puts "To exit, type 'quit'."
+	@input_side_desc = gets.strip.downcase.to_s
+	if @input_side_desc == 'fries' || @input_side_desc == 'salad' || @input_side_desc == 'soup' || @input_side_desc == 'brownie' || @input_side_desc == 'cookie'
+		puts @side[@input_side_desc.to_sym][:description]
+		side1
+	elsif @input_side_desc == 'quit'
+		puts "Thanks for visiting the Ruby Cafeteria!"
+		exit(0)
+	else
+		puts "User Input Error, Please Input Your Description Choice Again"
+		side_desc
+	end
+end
 
+def second_side
+	puts "Would you like another side (y/n)? You can type 'quit' to exit."
+	input3 = gets.strip.downcase.to_s
+	if input3 == 'yes' || input3 == 'y'
+		side1
+	elsif input3 == 'no' || input3 == 'n'
+		total
+	elsif input3 == 'quit'
+		puts "Thanks for visiting the Ruby Cafeteria!"
+		exit(0)
+	else
+		puts "User Input Error, Please Input Your Menu Choice Again"
+		second_side
+	end
+end
 
+def total
+	puts "Your order includes:"
+	@order.each do |food|
+		puts food
+	end
+	puts "Does this look right to you (y/n)?"
+	input4 = gets.strip.downcase.to_s
+	if input4 == 'yes' || input4 == 'y'
+		checkout
+	elsif input4 == 'no' || input4 == 'n'
+		@order.clear
+	else
+		puts "User Input Error, Please Input Your Menu Choice Again"
+		total
+	end
+end
 
-# def check_number(num)
-#   if num.include?('.')
-#     num.to_f.to_s == num
-#   else
-#     num.to_i.to_s == num
-#   end
-# end
+def checkout
+	total_cost = @sum.reduce(:+)
+	if total_cost > @money
+		puts "I'm sorry, you can't afford all this food. Please try again!"
+		main_menu
+	else
+		print "Your total is: $"
+		puts '%.2f' % @sum.reduce(:+)
+		puts "Thanks for eating at the Ruby Cafeteria. Enjoy!"
+	end
+end
+
+while true
+	puts "Welcome to the Ruby Cafeteria!"
+	budget
+end
